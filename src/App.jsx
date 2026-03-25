@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { GiAirplane } from "react-icons/gi";
 import "./App.css";
 import "./components/Navbar.css";
 import "./components/Sidebar.css";
@@ -51,7 +52,12 @@ const App = () => {
           {activeMenu === "Dashboard" ? (
             <Home />
           ) : (
-            <div className="empty-state">No data available</div>
+            <section className="empty-state" key={activeMenu}>
+              <div className="global-flight-runner" aria-hidden="true">
+                <GiAirplane className="global-flight-plane" />
+              </div>
+              <div className="empty-state-text">No data available</div>
+            </section>
           )}
         </main>
       </div>

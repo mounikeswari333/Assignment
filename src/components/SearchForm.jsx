@@ -1,6 +1,39 @@
 import "./SearchForm.css";
+import { FiRefreshCw } from "react-icons/fi";
+import { useEffect, useRef, useState } from "react";
 
-const SearchForm = ({ searchData, onInputChange, onSearch }) => {
+const SearchForm = ({
+  searchData,
+  onInputChange,
+  onSearch,
+  onSwap,
+  onPassengerChange,
+}) => {
+  const [isPassengerOpen, setIsPassengerOpen] = useState(false);
+  const passengerRef = useRef(null);
+
+  const { adults = 0, children = 0, infants = 0 } = searchData.passengers || {};
+
+  const passengerText = [
+    `${adults} Adult${adults === 1 ? "" : "s"}`,
+    `${children} Child${children === 1 ? "" : "ren"}`,
+    `${infants} Infant${infants === 1 ? "" : "s"}`,
+  ].join(", ");
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (
+        passengerRef.current &&
+        !passengerRef.current.contains(event.target)
+      ) {
+        setIsPassengerOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
+
   return (
     <form className="search-form" onSubmit={onSearch}>
       <input
@@ -11,6 +44,15 @@ const SearchForm = ({ searchData, onInputChange, onSearch }) => {
         value={searchData.from}
         onChange={onInputChange}
       />
+
+      <button
+        className="swap-button"
+        type="button"
+        onClick={onSwap}
+        aria-label="Swap from and to locations"
+      >
+        <FiRefreshCw />
+      </button>
 
       <input
         className="search-input"
@@ -49,18 +91,85 @@ const SearchForm = ({ searchData, onInputChange, onSearch }) => {
         />
       </div>
 
-      <select
-        className="search-select"
-        name="passengers"
-        value={searchData.passengers}
-        onChange={onInputChange}
-      >
-        <option value="1 Adult">1 Adult</option>
-        <option value="2 Adults">2 Adults</option>
-        <option value="2 Adults, 1 Child">2 Adults, 1 Child</option>
-        <option value="2 Adults, 2 Children">2 Adults, 2 Children</option>
-        <option value="3 Adults">3 Adults</option>
-      </select>
+      <div className="passenger-picker" ref={passengerRef}>
+        <button
+          className="search-select passenger-trigger"
+          type="button"
+          onClick={() => setIsPassengerOpen((prev) => !prev)}
+        >
+          {passengerText}
+        </button>
+
+        {isPassengerOpen ? (
+          <div className="passenger-panel">
+            <div className="passenger-row">
+              <div>
+                <div className="passenger-type">Adults</div>
+                <div className="passenger-age">Ages 13 or above</div>
+              </div>
+              <div className="passenger-actions">
+                <button
+                  type="button"
+                  onClick={() => onPassengerChange("adults", -1)}
+                >
+                  -
+                </button>
+                <span>{adults}</span>
+                <button
+                  type="button"
+                  onClick={() => onPassengerChange("adults", 1)}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <div className="passenger-row">
+              <div>
+                <div className="passenger-type">Children</div>
+                <div className="passenger-age">Ages 2-12</div>
+              </div>
+              <div className="passenger-actions">
+                <button
+                  type="button"
+                  onClick={() => onPassengerChange("children", -1)}
+                >
+                  -
+                </button>
+                <span>{children}</span>
+                <button
+                  type="button"
+                  onClick={() => onPassengerChange("children", 1)}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <div className="passenger-row">
+              <div>
+                <div className="passenger-type">Infants</div>
+                <div className="passenger-age">Under 2</div>
+              </div>
+              <div className="passenger-actions">
+                <button
+                  type="button"
+                  onClick={() => onPassengerChange("infants", -1)}
+                >
+                  -
+                </button>
+                <span>{infants}</span>
+                <button
+                  type="button"
+                  onClick={() => onPassengerChange("infants", 1)}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
+      </div>
 
       <button className="search-button" type="submit">
         Search Flights

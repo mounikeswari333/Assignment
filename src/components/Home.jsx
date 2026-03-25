@@ -117,8 +117,8 @@ const dummyFlights = [
   },
   {
     id: 6,
-    airline: "SpiceJet",
-    flightNumber: "SG 824",
+    airline: "Qatar Airways",
+    flightNumber: "QR 521",
     from: "Delhi",
     to: "Goa",
     date: "2026-03-12",
@@ -204,6 +204,8 @@ const isTimeInSlot = (timeValue, slot) => {
 };
 
 const Home = () => {
+  const skeletonCards = [1, 2, 3];
+
   const [activeHolidayTab, setActiveHolidayTab] = useState("Indian Holidays");
   const [activePackageTab, setActivePackageTab] = useState(
     "Package with Flights",
@@ -213,7 +215,11 @@ const Home = () => {
     to: "",
     departDate: "",
     returnDate: "",
-    passengers: "2 Adults, 2 Children",
+    passengers: {
+      adults: 2,
+      children: 2,
+      infants: 0,
+    },
   });
   const [appliedSearch, setAppliedSearch] = useState(searchData);
   const [maxPrice, setMaxPrice] = useState(20000);
@@ -249,6 +255,28 @@ const Home = () => {
     }, 450);
   };
 
+  const handlePassengerChange = (type, delta) => {
+    setSearchData((prev) => {
+      const nextValue = Math.max(0, prev.passengers[type] + delta);
+
+      return {
+        ...prev,
+        passengers: {
+          ...prev.passengers,
+          [type]: nextValue,
+        },
+      };
+    });
+  };
+
+  const handleSwap = () => {
+    setSearchData((prev) => ({
+      ...prev,
+      from: prev.to,
+      to: prev.from,
+    }));
+  };
+
   const handleAirlineToggle = (airlineName) => {
     setSelectedAirlines((prev) => {
       if (prev.includes(airlineName)) {
@@ -268,7 +296,7 @@ const Home = () => {
   };
 
   const filteredFlights = useMemo(() => {
-    const searched = dummyFlights.filter((flight) => {
+    const baseMatches = dummyFlights.filter((flight) => {
       const fromMatch =
         !appliedSearch.from ||
         flight.from.toLowerCase().includes(appliedSearch.from.toLowerCase());
@@ -277,11 +305,24 @@ const Home = () => {
         !appliedSearch.to ||
         flight.to.toLowerCase().includes(appliedSearch.to.toLowerCase());
 
-      const dateMatch =
-        !appliedSearch.departDate || flight.date === appliedSearch.departDate;
-
-      return fromMatch && toMatch && dateMatch;
+      return fromMatch && toMatch;
     });
+
+    let searched = baseMatches;
+
+    if (appliedSearch.departDate) {
+      const sameDateFlights = baseMatches.filter(
+        (flight) => flight.date === appliedSearch.departDate,
+      );
+
+      searched =
+        sameDateFlights.length > 0
+          ? sameDateFlights
+          : baseMatches.map((flight) => ({
+              ...flight,
+              date: appliedSearch.departDate,
+            }));
+    }
 
     const filtered = searched.filter((flight) => {
       const priceMatch = flight.price <= maxPrice;
@@ -339,6 +380,64 @@ const Home = () => {
     [appliedSearch.returnDate, filteredFlights],
   );
 
+  if (isLoading) {
+    return (
+      <section
+        className="dashboard-card dashboard-skeleton"
+        aria-label="Loading dashboard"
+      >
+        <div className="skeleton-tab-row">
+          <div className="skeleton-pill" />
+          <div className="skeleton-pill" />
+        </div>
+
+        <div className="skeleton-package-row">
+          <div className="skeleton-pill" />
+          <div className="skeleton-pill" />
+        </div>
+
+        <div className="skeleton-search-grid">
+          <div className="skeleton-input" />
+          <div className="skeleton-input" />
+          <div className="skeleton-input" />
+          <div className="skeleton-input" />
+          <div className="skeleton-input" />
+          <div className="skeleton-button" />
+        </div>
+
+        <div className="skeleton-filters-grid">
+          <div className="skeleton-filter" />
+          <div className="skeleton-filter" />
+          <div className="skeleton-filter" />
+          <div className="skeleton-filter" />
+          <div className="skeleton-filter" />
+        </div>
+
+        <div className="skeleton-chip-row">
+          {skeletonCards.concat([4, 5, 6]).map((item) => (
+            <div key={`chip-${item}`} className="skeleton-chip" />
+          ))}
+        </div>
+
+        <div className="loading-skeleton">
+          <div className="skeleton-summary" />
+          <div className="skeleton-columns">
+            <div className="skeleton-column">
+              {skeletonCards.map((item) => (
+                <div key={`left-${item}`} className="skeleton-card" />
+              ))}
+            </div>
+            <div className="skeleton-column">
+              {skeletonCards.map((item) => (
+                <div key={`right-${item}`} className="skeleton-card" />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="dashboard-card">
       <div className="tab-row">
@@ -387,6 +486,8 @@ const Home = () => {
         searchData={searchData}
         onInputChange={handleInputChange}
         onSearch={handleSearch}
+        onSwap={handleSwap}
+        onPassengerChange={handlePassengerChange}
       />
 
       <div className="filters-toolbar">
@@ -477,9 +578,7 @@ const Home = () => {
         })}
       </div>
 
-      {isLoading ? (
-        <div className="loading">Loading...</div>
-      ) : filteredFlights.length > 0 ? (
+      {filteredFlights.length > 0 ? (
         <FlightList
           outboundFlights={filteredFlights}
           returnFlights={returnFlights}

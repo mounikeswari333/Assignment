@@ -1,6 +1,7 @@
 :root {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #1f2a37;
+  font-size: 16px;
 }
 
 * {
@@ -9,13 +10,66 @@
 
 body {
   margin: 0;
-  background: linear-gradient(120deg, #f4f7fb 0%, #ecf2ff 100%);
+  min-height: 100vh;
+  position: relative;
+  background:
+    radial-gradient(
+      circle at 10% 20%,
+      rgba(38, 67, 124, 0.8) 0%,
+      rgba(38, 67, 124, 0) 38%
+    ),
+    radial-gradient(
+      circle at 90% 15%,
+      rgba(96, 48, 123, 0.45) 0%,
+      rgba(96, 48, 123, 0) 42%
+    ),
+    linear-gradient(140deg, #080d1a 0%, #0f1c32 52%, #12243f 100%);
+  color: #dfe8ff;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  width: 55vw;
+  height: 55vw;
+  min-width: 420px;
+  min-height: 420px;
+  border-radius: 50%;
+  filter: blur(34px);
+  opacity: 0.32;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::before {
+  top: -16vw;
+  left: -14vw;
+  background: radial-gradient(
+    circle,
+    rgba(98, 141, 250, 0.8) 0%,
+    rgba(98, 141, 250, 0) 68%
+  );
+  animation: ambient-drift 14s ease-in-out infinite;
+}
+
+body::after {
+  right: -18vw;
+  bottom: -18vw;
+  background: radial-gradient(
+    circle,
+    rgba(155, 116, 255, 0.7) 0%,
+    rgba(155, 116, 255, 0) 70%
+  );
+  animation: ambient-drift-reverse 18s ease-in-out infinite;
 }
 
 .app-layout {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 260px 1fr;
+  position: relative;
+  z-index: 2;
 }
 
 .app-layout.sidebar-collapsed {
@@ -28,21 +82,113 @@ body {
 }
 
 .main-content {
-  padding: 20px;
+  padding: 22px;
 }
 
 .empty-state {
-  background: #ffffff;
-  border: 1px dashed #c7d2e5;
-  border-radius: 12px;
-  padding: 28px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 12px 6px;
+  min-height: 200px;
+  display: grid;
+  align-content: center;
+  gap: 16px;
+  overflow: hidden;
+}
+
+.global-flight-runner {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  overflow: hidden;
+}
+
+.global-flight-plane {
+  position: absolute;
+  top: 12vh;
+  left: -120px;
+  font-size: 68px;
+  color: rgba(230, 241, 255, 0.95);
+  opacity: 0;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.28));
+  transform: rotate(8deg);
+  animation: page-flight-move 6.8s linear infinite;
+}
+
+.empty-state-text {
   text-align: center;
-  color: #4b5f78;
-  font-weight: 600;
+  color: #dfe8ff;
+  font-weight: 700;
+  font-size: 1.2rem;
+  opacity: 0;
+  animation: show-empty-text 0.35s ease forwards;
+  animation-delay: 1.45s;
+}
+
+@keyframes page-flight-move {
+  0% {
+    left: -120px;
+    top: 18vh;
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  50% {
+    top: 12vh;
+  }
+
+  100% {
+    left: calc(100% + 120px);
+    top: 20vh;
+    opacity: 0;
+  }
+}
+
+@keyframes show-empty-text {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ambient-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(3vw, 4vh, 0) scale(1.08);
+  }
+}
+
+@keyframes ambient-drift-reverse {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(-4vw, -5vh, 0) scale(1.1);
+  }
 }
 
 @media (max-width: 980px) {
   .app-layout {
     grid-template-columns: 1fr;
+  }
+
+  .global-flight-plane {
+    font-size: 50px;
   }
 }
