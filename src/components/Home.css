@@ -1,0 +1,128 @@
+.dashboard-card {
+  background: #ffffff;
+  border: 1px solid #e6ebf4;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  padding: 20px;
+}
+
+.tab-row,
+.package-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.tab-button,
+.package-button {
+  border: 1px solid #d4ddee;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 9px 14px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.tab-button.active,
+.package-button.active {
+  background: #111827;
+  border-color: #111827;
+  color: #ffffff;
+}
+
+.filters-toolbar {
+  display: grid;
+  grid-template-columns: 1.2fr repeat(3, minmax(140px, 1fr)) auto;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.filter-block {
+  background: #f7faff;
+  border: 1px solid #d4ddee;
+  border-radius: 10px;
+  padding: 9px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.filter-block label {
+  font-size: 12px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.filter-block input[type="range"] {
+  width: 100%;
+}
+
+.filter-block select {
+  border: 1px solid #c7d4e8;
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 13px;
+  background: #ffffff;
+}
+
+.filter-inline {
+  justify-content: center;
+}
+
+.clear-filter-button {
+  border: 1px solid #c9d6ea;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0f172a;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0 14px;
+}
+
+.airline-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.airline-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #ced9eb;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: #334155;
+  background: #ffffff;
+}
+
+.airline-chip.checked {
+  background: #e8f1ff;
+  border-color: #7aa6e6;
+  color: #0a3a7d;
+}
+
+.loading,
+.no-flights {
+  background: #ffffff;
+  border: 1px dashed #c7d2e5;
+  border-radius: 12px;
+  padding: 28px;
+  text-align: center;
+  color: #4b5f78;
+  font-weight: 600;
+}
+
+@media (max-width: 980px) {
+  .filters-toolbar {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .filters-toolbar {
+    grid-template-columns: 1fr;
+  }
+}

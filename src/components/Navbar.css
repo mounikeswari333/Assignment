@@ -1,0 +1,157 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  border-bottom: 1px solid #e6ebf4;
+  padding: 0 24px;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-icon-button {
+  border: 1px solid #d3deef;
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: #7a8798;
+  cursor: pointer;
+  position: relative;
+}
+
+.nav-icon-button svg {
+  font-size: 16px;
+}
+
+.nav-icon-button.green {
+  border-color: #9dd9be;
+  color: #2f9166;
+}
+
+.nav-icon-button.blue {
+  border-color: #b9c8f7;
+  color: #4a5cb8;
+}
+
+.nav-icon-button.red {
+  border-color: #efb5b5;
+  color: #be4f4f;
+}
+
+.nav-badge {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  color: #ffffff;
+  background: #10b981;
+}
+
+.nav-icon-button.blue .nav-badge {
+  background: #4f46e5;
+}
+
+.nav-icon-button.red .nav-badge {
+  background: #ef4444;
+}
+
+.hamburger-button {
+  border: 1px solid #d3deef;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.hamburger-button span {
+  width: 16px;
+  height: 2px;
+  background: #1f2a37;
+  border-radius: 999px;
+}
+
+.logo {
+  font-size: 30px;
+  font-weight: 800;
+  color: #0a8856;
+  letter-spacing: 0.02em;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #334155;
+}
+
+.profile-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #dbeafe;
+  color: #1e3a8a;
+  font-weight: 700;
+}
+
+.profile-name {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.profile-chevron {
+  color: #8ea0b3;
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .navbar {
+    padding: 0 14px;
+  }
+
+  .logo {
+    font-size: 24px;
+  }
+
+  .navbar-actions {
+    display: none;
+  }
+
+  .profile-name {
+    display: none;
+  }
+}
