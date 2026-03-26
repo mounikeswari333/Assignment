@@ -49,14 +49,14 @@ const App = () => {
         />
 
         <main className="main-content">
-          {activeMenu === "Dashboard" ? (
+          {activeMenu === "Leads Data" ? (
             <Home />
           ) : (
             <section className="empty-state" key={activeMenu}>
               <div className="global-flight-runner" aria-hidden="true">
                 <GiAirplane className="global-flight-plane" />
               </div>
-              <div className="empty-state-text">No data available</div>
+              <div className="empty-state-text">No Data Found</div>
             </section>
           )}
         </main>
